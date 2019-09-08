@@ -5,16 +5,20 @@ orbs:
 
 jobs:
   build:
+    # Configure environment
     environment:
-      _JAVA_OPTIONS: "-Xmx3g"
-      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+      JAVA_TOOL_OPTIONS: "-Xmx3g"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2" #
+    # Use JDK8 docker image
     docker:
       - image: circleci/openjdk:8-jdk-stretch
     steps:
-      - checkout
+      - checkout # Get project files from git
+      # Restore old .gradle if exists
       - restore_cache:
           keys:
             - dependencies-{{ checksum "build.gradle" }}
+      # Run setupDecompWorkspace and build
       - run:
           name: Create JAR file
           command: |
@@ -25,15 +29,39 @@ jobs:
           paths:
             - ~/.gradle
           key: dependencies-{{ checksum "build.gradle" }}
+      # Upload artifacts
       - store_artifacts:
           path: build/libs
           destination: /
+      # Discord webhook
       - slack/status:
           success_message: Branch $CIRCLE_BRANCH, build $CIRCLE_BUILD_NUM passed. Download at $CIRCLE_BUILD_URL#artifacts/containers/0
           failure_message: Branch $CIRCLE_BRANCH, build $CIRCLE_BUILD_NUM failed. $CIRCLE_BUILD_URL
-
+      # Save jar file for testing
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - build/libs/ValkyrienSkies-1.12.2-1.0.jar
+  test_vanilla:
+    JAVA_TOOL_OPTIONS: "-Xmx3g"
+    docker:
+      - image: circleci/openjdk:8-jdk-stretch
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Run Forge
+          command: |
+            mv /tmp/workspace/ValkyrienSkies-1.12.2-1.0.jar /tmp/workspace/forge/mods/ourmod.jar
+            wget https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2846/forge-1.12.2-14.23.5.2846-installer.jar
+            java -jar forge-1.12.2-14.23.5.2846-installer.jar --installServer
+            echo -n "eula=true" >> eula.txt
+            (timeout 20s java -jar forge-1.12.2-14.23.5.2846-universal.jar; exit 0)
 workflows:
   version: 2
-  workflow:
+  build:
     jobs:
       - build
+      - test_vanilla:
+          requires:
+            - build
