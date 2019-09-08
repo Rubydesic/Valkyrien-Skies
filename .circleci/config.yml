@@ -43,7 +43,8 @@ jobs:
           paths:
             - build/libs/ValkyrienSkies-1.12.2-1.0.jar
   test_vanilla:
-    JAVA_TOOL_OPTIONS: "-Xmx3g"
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx3g"
     docker:
       - image: circleci/openjdk:8-jdk-stretch
     steps:
