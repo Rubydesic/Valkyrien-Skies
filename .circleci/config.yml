@@ -54,6 +54,7 @@ jobs:
           name: Run Forge
           command: |
             export TERM=xterm
+            mkdir -p /tmp/workspace/forge/mods
             cd /tmp/workspace/forge
             mv /tmp/workspace/ValkyrienSkies-1.12.2-1.0.jar mods/ourmod.jar
             wget https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2846/forge-1.12.2-14.23.5.2846-installer.jar
