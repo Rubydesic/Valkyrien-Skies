@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Create JAR file
           command: |
-            export TERM=${TERM:-dumb}
+            export TERM=xterm
             ./gradlew setupDecompWorkspace
             ./gradlew build
       - save_cache:
