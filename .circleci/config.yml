@@ -39,9 +39,9 @@ jobs:
           failure_message: Branch $CIRCLE_BRANCH, build $CIRCLE_BUILD_NUM failed. $CIRCLE_BUILD_URL
       # Save jar file for testing
       - persist_to_workspace:
-          root: workspace
+          root: build/libs
           paths:
-            - build/libs/ValkyrienSkies-1.12.2-1.0.jar
+            - ValkyrienSkies-1.12.2-1.0.jar
   test_vanilla:
     environment:
       JAVA_TOOL_OPTIONS: "-Xmx3g"
