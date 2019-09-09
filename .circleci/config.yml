@@ -93,9 +93,9 @@ jobs:
             chmod +x runforge.sh
             ./runforge.sh 35
       - save_cache:
-          paths: /tmp/workspace/forge/mods/testmod.jar
-          keys:
-            - 2745046
+          paths: 
+            - /tmp/workspace/forge/mods/testmod.jar
+          key: 2745046
 workflows:
   version: 2
   build:
