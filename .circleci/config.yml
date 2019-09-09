@@ -50,6 +50,9 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
+      - restore_cache:
+          keys:
+            - forge-1.12.2-14.23.5.2846-installer.jar
       - run:
           name: Run Forge
           command: |
@@ -57,12 +60,16 @@ jobs:
             mkdir -p /tmp/workspace/forge/mods
             cd /tmp/workspace/forge
             mv /tmp/workspace/ValkyrienSkies-1.12.2-1.0.jar mods/ourmod.jar
-            wget https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2846/forge-1.12.2-14.23.5.2846-installer.jar
+            wget -nc https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2846/forge-1.12.2-14.23.5.2846-installer.jar
             java -jar forge-1.12.2-14.23.5.2846-installer.jar --installServer
             echo -n "eula=true" >> eula.txt
             printf "#!/bin/bash\njava -jar forge-1.12.2-14.23.5.2846-universal.jar &\nTASK_PID=\$!\nsleep \$1\nkill \$TASK_PID" > runforge.sh
             chmod +x runforge.sh
             ./runforge.sh 30
+      - save_cache:
+          paths:
+            - /tmp/workspace/forge/forge-1.12.2-14.23.5.2846-installer.jar
+          key: forge-1.12.2-14.23.5.2846-installer.jar
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
@@ -75,6 +82,9 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
+      - restore_cache:
+          keys:
+            - 2745046
       - run:
           name: Run Forge
           command: |
@@ -82,6 +92,10 @@ jobs:
             wget -nc -4 -O mods/testmod.jar https://www.curseforge.com/minecraft/mc-mods/p455w0rds-library/download/2745046/file
             chmod +x runforge.sh
             ./runforge.sh 35
+      - save_cache:
+          paths: /tmp/workspace/forge/mods/testmod.jar
+          keys:
+            - 2745046
 workflows:
   version: 2
   build:
