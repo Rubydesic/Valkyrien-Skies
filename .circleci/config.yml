@@ -72,6 +72,8 @@ jobs:
       JAVA_TOOL_OPTIONS: "-Xmx3g"
       docker:
         - image: circleci/openjdk:8-jdk-stretch
+    docker:
+      - image: circleci/openjdk:8-jdk-stretch
     steps:
       - attach_workspace:
           at: /tmp/workspace
