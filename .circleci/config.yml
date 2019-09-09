@@ -84,7 +84,7 @@ jobs:
           command: |
             export TERM=xterm
             cd /tmp/workspace/forge
-            wget -nc -4 -O mods/testmod.jar https://www.curseforge.com/minecraft/mc-mods/p455w0rds-library/download/2745046/file
+            (wget -nc -4 -O mods/testmod.jar https://www.curseforge.com/minecraft/mc-mods/p455w0rds-library/download/2745046/file; exit 0)
             chmod +x runforge.sh
             ./runforge.sh 35
       - save_cache:
