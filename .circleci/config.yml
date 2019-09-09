@@ -78,7 +78,9 @@ jobs:
       - run:
           name: Run Forge
           command: |
-            wget -nc -4 -O /tmp/workspace/forge/mods/testmod.jar https://www.curseforge.com/minecraft/mc-mods/p455w0rds-library/download/2745046/file
+            cd /tmp/workspace/forge
+            wget -nc -4 -O mods/testmod.jar https://www.curseforge.com/minecraft/mc-mods/p455w0rds-library/download/2745046/file
+            chmod +x runforge.sh
             ./runforge.sh 35
 workflows:
   version: 2
