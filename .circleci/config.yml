@@ -63,6 +63,23 @@ jobs:
             printf "#!/bin/bash\njava -jar forge-1.12.2-14.23.5.2846-universal.jar &\nTASK_PID=\$!\nsleep 15\nkill \$TASK_PID" > runforge.sh
             chmod +x runforge.sh
             ./runforge.sh
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - forge
+  test_mod_1: # P4ssw0rds Lib
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx3g"
+      docker:
+        - image: circleci/openjdk:8-jdk-stretch
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Run Forge
+          command: |
+            wget -4 -O /tmp/workspace/forge/mods/testmod.jar https://www.curseforge.com/minecraft/mc-mods/p455w0rds-library/download/2745046/file
+            ./runforge.sh
 workflows:
   version: 2
   build:
@@ -71,3 +88,6 @@ workflows:
       - test_vanilla:
           requires:
             - build
+      - test_mod_1:
+          requires:
+            - test_vanilla
