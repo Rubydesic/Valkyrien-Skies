@@ -57,7 +57,7 @@ jobs:
             mkdir -p /tmp/workspace/forge/mods
             cd /tmp/workspace/forge
             mv /tmp/workspace/ValkyrienSkies-1.12.2-1.0.jar mods/ourmod.jar
-            wget -nc https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2846/forge-1.12.2-14.23.5.2846-installer.jar
+            wget -nc -4 https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2846/forge-1.12.2-14.23.5.2846-installer.jar
             java -jar forge-1.12.2-14.23.5.2846-installer.jar --installServer
             echo -n "eula=true" >> eula.txt
             printf "#!/bin/bash\njava -jar forge-1.12.2-14.23.5.2846-universal.jar &\nTASK_PID=\$!\nsleep \$1\nkill \$TASK_PID" > runforge.sh
@@ -78,7 +78,7 @@ jobs:
           at: /tmp/workspace
       - restore_cache:
           keys:
-            - "2745046"
+            - "https://www.curseforge.com/minecraft/mc-mods/p455w0rds-library/download/2745046/file"
       - run:
           name: Run Forge
           command: |
@@ -90,7 +90,27 @@ jobs:
       - save_cache:
           paths:
             - /tmp/workspace/forge/mods/testmod.jar
-          key: "2745046"
+          key: "https://www.curseforge.com/minecraft/mc-mods/p455w0rds-library/download/2745046/file"
+  mod_replay_mod: # P4ssw0rds Lib
+    <<: *environment_defaults
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - restore_cache:
+          keys:
+            - "https://www.replaymod.com/download/download_new.php?version=1.12.2-2.2.0-b7&mirror=true"
+      - run:
+          name: Run Forge
+          command: |
+            export TERM=xterm
+            cd /tmp/workspace/forge
+            (wget -nc -4 -O mods/testmod.jar https://www.replaymod.com/download/download_new.php?version=1.12.2-2.2.0-b7&mirror=true; exit 0)
+            chmod +x runforge.sh
+            ./runforge.sh 35
+      - save_cache:
+          paths:
+            - /tmp/workspace/forge/mods/testmod.jar
+          key: "https://www.replaymod.com/download/download_new.php?version=1.12.2-2.2.0-b7&mirror=true"
 workflows:
   version: 2
   build:
@@ -100,5 +120,8 @@ workflows:
           requires:
             - build
       - mod_p4ssw0rds_lib:
+          requires:
+            - test_vanilla
+      - mod_replay_mod:
           requires:
             - test_vanilla
