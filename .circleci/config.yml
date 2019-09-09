@@ -74,7 +74,7 @@ jobs:
           root: /tmp/workspace
           paths:
             - forge
-  test_mod_1: # P4ssw0rds Lib
+  mod_p4ssw0rds_lib: # P4ssw0rds Lib
     environment:
       JAVA_TOOL_OPTIONS: "-Xmx3g"
     docker:
@@ -84,7 +84,7 @@ jobs:
           at: /tmp/workspace
       - restore_cache:
           keys:
-            - 2745046
+            - "2745046"
       - run:
           name: Run Forge
           command: |
@@ -93,9 +93,9 @@ jobs:
             chmod +x runforge.sh
             ./runforge.sh 35
       - save_cache:
-          paths: 
+          paths:
             - /tmp/workspace/forge/mods/testmod.jar
-          key: 2745046
+          key: "2745046"
 workflows:
   version: 2
   build:
@@ -104,6 +104,6 @@ workflows:
       - test_vanilla:
           requires:
             - build
-      - test_mod_1:
+      - mod_p4ssw0rds_lib:
           requires:
             - test_vanilla
