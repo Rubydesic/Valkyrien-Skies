@@ -60,7 +60,8 @@ jobs:
             wget https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2846/forge-1.12.2-14.23.5.2846-installer.jar
             java -jar forge-1.12.2-14.23.5.2846-installer.jar --installServer
             echo -n "eula=true" >> eula.txt
-            (timeout 20s java -jar forge-1.12.2-14.23.5.2846-universal.jar; exit 0)
+            printf "#!/bin/bash\njava -jar forge-1.12.2-14.23.5.2846-universal.jar &\nTASK_PID=\$!\nsleep 15\nkill \$TASK_PID" > runforge.sh
+            ./runforge.sh
 workflows:
   version: 2
   build:
