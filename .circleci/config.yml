@@ -3,8 +3,8 @@ version: 2.1
 environment_defaults: &environment_defaults
   environment:
     JAVA_TOOL_OPTIONS: "-Xmx3g"
-    docker:
-      - image: circleci/openjdk:8-jdk-stretch
+  docker:
+    - image: circleci/openjdk:8-jdk-stretch
 
 orbs:
   slack: circleci/slack@3.3.0
