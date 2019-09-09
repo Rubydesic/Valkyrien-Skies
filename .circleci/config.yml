@@ -61,6 +61,7 @@ jobs:
             java -jar forge-1.12.2-14.23.5.2846-installer.jar --installServer
             echo -n "eula=true" >> eula.txt
             printf "#!/bin/bash\njava -jar forge-1.12.2-14.23.5.2846-universal.jar &\nTASK_PID=\$!\nsleep 15\nkill \$TASK_PID" > runforge.sh
+            chmod +x runforge.sh
             ./runforge.sh
 workflows:
   version: 2
