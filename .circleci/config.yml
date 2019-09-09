@@ -1,17 +1,17 @@
 version: 2.1
 
+environment_defaults: &environment_defaults
+  environment:
+    JAVA_TOOL_OPTIONS: "-Xmx3g"
+    docker:
+      - image: circleci/openjdk:8-jdk-stretch
+
 orbs:
   slack: circleci/slack@3.3.0
 
 jobs:
   build:
-    # Configure environment
-    environment:
-      JAVA_TOOL_OPTIONS: "-Xmx3g"
-      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2" #
-    # Use JDK8 docker image
-    docker:
-      - image: circleci/openjdk:8-jdk-stretch
+    <<: *environment_defaults
     steps:
       - checkout # Get project files from git
       # Restore old .gradle if exists
@@ -43,10 +43,7 @@ jobs:
           paths:
             - ValkyrienSkies-1.12.2-1.0.jar
   test_vanilla:
-    environment:
-      JAVA_TOOL_OPTIONS: "-Xmx3g"
-    docker:
-      - image: circleci/openjdk:8-jdk-stretch
+    <<: *environment_defaults
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -75,10 +72,7 @@ jobs:
           paths:
             - forge
   mod_p4ssw0rds_lib: # P4ssw0rds Lib
-    environment:
-      JAVA_TOOL_OPTIONS: "-Xmx3g"
-    docker:
-      - image: circleci/openjdk:8-jdk-stretch
+    <<: *environment_defaults
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -88,6 +82,7 @@ jobs:
       - run:
           name: Run Forge
           command: |
+            export TERM=xterm
             cd /tmp/workspace/forge
             wget -nc -4 -O mods/testmod.jar https://www.curseforge.com/minecraft/mc-mods/p455w0rds-library/download/2745046/file
             chmod +x runforge.sh
