@@ -245,7 +245,8 @@ jar {
         /*exclude "META-INF/*.SF"
         exclude "META-INF/*.DSA"
         exclude "META-INF/*.RSA"*/
-        exclude "META-INF/*"
+        exclude "META-INF/**"
+        exclude "module-info.class"
     }
 
     manifest.attributes(
